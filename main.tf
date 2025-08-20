@@ -25,7 +25,7 @@ module "firewall_policy" {
 }
 
 module "virtual_wan" {
-  source  = "Azure/avm-ptn-virtualwan/azurerm"
+  source  = "github.com/ArunasFalcon/terraform-azurerm-avm-ptn-virtualwan-ip"
   version = "0.12.3"
 
   location                              = var.virtual_wan_settings.location
