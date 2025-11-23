@@ -3,7 +3,7 @@ module "firewall_policy" {
   version  = "0.3.3"
   for_each = local.firewall_policies
 
-  location                                          = each.value.location
+  location                                          = local.firewall_policy_to_base_policy_location_map[each.key] //needs to be set to the region of the base policy if that was provided
   name                                              = each.value.name
   resource_group_name                               = each.value.resource_group_name
   enable_telemetry                                  = var.enable_telemetry
