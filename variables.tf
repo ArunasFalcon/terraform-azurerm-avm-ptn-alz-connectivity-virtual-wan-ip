@@ -346,8 +346,11 @@ variable "virtual_hubs" {
       resource_group_name               = optional(string)
       sku                               = optional(string, "Standard")
       auto_learn_private_ranges_enabled = optional(bool)
-      base_policy_id                    = optional(string)
-      tags                              = optional(map(string))
+      base_policy = optional(object({
+        id       = string
+        location = string
+      }))
+      tags = optional(map(string))
       dns = optional(object({
         proxy_enabled = optional(bool, false)
         servers       = optional(list(string))
