@@ -32,7 +32,7 @@ locals {
 data "azurerm_firewall_policy" "base_policy" {
   for_each = local.hubs_with_base_policies
 
-  name                = each.value
+  name                = local.base_policy_names[each.key]
   resource_group_name = local.base_policy_resource_group_names[each.key]
 }
 //make a fw policy to region map, set region to base policy region if a base policy was provided, otherwise leave the original region
