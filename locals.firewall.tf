@@ -24,17 +24,18 @@ locals {
 
 //determine resource group and name of firewall base policy
 locals {
-  base_policy_resource_group_names = { for k, v in var.virtual_hubs : k => split("/", v.firewall_policy.base_policy_id)[4] if try(v.firewall_policy.base_policy_id, "") > 0 }
-  base_policy_names                = { for k, v in var.virtual_hubs : k => split("/", v.firewall_policy.base_policy_id)[8] if try(v.firewall_policy.base_policy_id, "") > 0 }
+  hubs_with_base_policies          = { for k, v in var.virtual_hubs : k => v if lookup(lookup(v, "firewall_policy", {}), "base_policy_id", "") != "" }
+  base_policy_resource_group_names = { for k, v in local.hubs_with_base_policies : k => split("/", v.firewall_policy.base_policy_id)[4] }
+  base_policy_names                = { for k, v in local.hubs_with_base_policies : k => split("/", v.firewall_policy.base_policy_id)[8] }
 }
 //create data source to read the region
 data "azurerm_firewall_policy" "base_policy" {
-  for_each = var.virtual_hubs //TODO if the two locals above have the key
+  for_each = local.hubs_with_base_policies
 
   name                = each.value
   resource_group_name = local.base_policy_resource_group_names[each.key]
 }
 //make a fw policy to region map, set region to base policy region if a base policy was provided, otherwise leave the original region
 locals {
-  firewall_policy_to_base_policy_location_map = { for k, v in local.virtual_hubs : k => try(data.azurerm_firewall_policy.base_policy[k].location, v.location) }
+  firewall_policy_to_base_policy_location_map = { for k, v in var.virtual_hubs : k => try(data.azurerm_firewall_policy.base_policy[k].location, v.location) }
 }
