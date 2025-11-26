@@ -106,3 +106,7 @@ output "virtual_hub_resource_names" {
 output "firewall_policy_to_base_policy_location_map" {
   value = local.firewall_policy_to_base_policy_location_map
 }
+
+output "subnets" {
+  value = local.subnets
+}
