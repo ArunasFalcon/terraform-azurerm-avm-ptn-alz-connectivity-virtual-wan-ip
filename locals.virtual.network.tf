@@ -31,7 +31,7 @@ locals {
       address_prefixes = [coalesce(value.private_dns_resolver.subnet_address_prefix, local.virtual_network_subnet_default_ip_prefixes[key]["dns_resolver"])]
       name             = value.private_dns_resolver.subnet_name
       delegations = [{
-        name = "Microsoft.Network/dnsResolvers"
+        name = "Microsoft.Network.dnsResolvers"
         service_delegation = {
           name = "Microsoft.Network/dnsResolvers"
           actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
