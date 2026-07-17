@@ -48,3 +48,7 @@ output "resource_object" {
     }
   } : {}
 }
+
+output "fw_ip_configuration" {
+  value = { for k, v in var.firewalls : k => data.azurerm_firewall.fw[k].ip_configuration }
+}

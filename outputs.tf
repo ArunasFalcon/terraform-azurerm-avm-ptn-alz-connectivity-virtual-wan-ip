@@ -102,3 +102,7 @@ output "virtual_hub_resource_names" {
   description = "The names of the virtual hubs associated with the virtual WAN."
   value       = local.has_regions ? module.virtual_wan[0].virtual_hub_resource_names : null
 }
+
+output "fw_ip_configuration" {
+  value = module.virtual_wan[0].fw_ipconfiguration
+}
