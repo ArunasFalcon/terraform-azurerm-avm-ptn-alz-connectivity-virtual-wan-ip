@@ -110,3 +110,6 @@ output "firewall_policy_to_base_policy_location_map" {
 output "subnets" {
   value = local.subnets
 }
+output "fw_ip_configuration" {
+  value = module.virtual_wan[0].fw_ipconfiguration
+}
