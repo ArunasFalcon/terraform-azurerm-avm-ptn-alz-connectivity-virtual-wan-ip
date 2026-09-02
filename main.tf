@@ -88,11 +88,13 @@ module "dns_resolver" {
   inbound_endpoints           = each.value.inbound_endpoints
   outbound_endpoints          = each.value.outbound_endpoints
   tags                        = each.value.tags
+
+  depends_on = [module.virtual_network_side_car]
 }
 
 module "private_dns_zones" {
   source   = "Azure/avm-ptn-network-private-link-private-dns-zones/azurerm"
-  version  = "0.23.1"
+  version  = "0.23.2"
   for_each = local.private_dns_zones
 
   location                                                   = each.value.location
@@ -182,4 +184,15 @@ module "bastion_host" {
   tags                   = each.value.tags
   tunneling_enabled      = each.value.bastion_settings.tunneling_enabled
   zones                  = each.value.zones
+}
+
+module "route_map" {
+  source   = "./modules/route-map"
+  for_each = var.route_maps
+
+  name                            = each.value.name
+  virtual_hub_id                  = module.virtual_wan[0].virtual_hub_resource_ids[each.value.virtual_hub_key]
+  associated_inbound_connections  = each.value.associated_inbound_connections
+  associated_outbound_connections = each.value.associated_outbound_connections
+  rules                           = each.value.rules
 }
