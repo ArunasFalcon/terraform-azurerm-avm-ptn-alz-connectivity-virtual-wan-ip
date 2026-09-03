@@ -33,7 +33,7 @@ locals {
       delegations = [{
         name = "Microsoft.Network.dnsResolvers"
         service_delegation = {
-          name = "Microsoft.Network/dnsResolvers"
+          name    = "Microsoft.Network/dnsResolvers"
           actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
         }
       }]

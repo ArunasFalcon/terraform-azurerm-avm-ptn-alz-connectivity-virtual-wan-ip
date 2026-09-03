@@ -1,3 +1,10 @@
+module "firewall_generated_public_ip_config" {
+  source   = "../ip-config-generator"
+  for_each = var.firewalls
+
+  public_ips = each.value.firewall_public_ip_ids
+}
+
 data "azurerm_resource_group" "fw_rg" {
   for_each = var.firewalls != null ? var.firewalls : {}
 
@@ -29,7 +36,7 @@ resource "azapi_resource" "fw" {
           count = each.value.vhub_public_ip_count
         }
       } : null
-      ipConfigurations = local.ip_configuration[each.key]
+      ipConfigurations = local.combined_ip_configurations[each.key]
     }
   }
   schema_validation_enabled = false

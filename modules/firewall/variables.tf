@@ -57,17 +57,28 @@ variable "diagnostic_settings" {
 
 variable "firewalls" {
   type = map(object({
-    virtual_hub_id        = string
-    sku_name              = optional(string, "AZFW_Hub")
-    location              = string
-    resource_group_name   = string
-    sku_tier              = string
-    name                  = string
-    zones                 = optional(list(number), [1, 2, 3])
-    firewall_policy_id    = optional(string)
-    vhub_public_ip_count  = optional(string, null)
-    tags                  = optional(map(string))
-    firewall_public_ip_id = optional(string)
+    virtual_hub_id       = string
+    sku_name             = optional(string, "AZFW_Hub")
+    location             = string
+    resource_group_name  = string
+    sku_tier             = string
+    name                 = string
+    zones                = optional(list(number), [1, 2, 3])
+    firewall_policy_id   = optional(string)
+    vhub_public_ip_count = optional(string, null)
+    tags                 = optional(map(string))
+    firewall_public_ip_ids = optional(list(object({
+      name         = optional(string)
+      public_ip_id = string
+    })), [])
+    firewall_public_ip_configurations = optional(list(object({
+      name = string
+      properties = object({
+        publicIPAddress = object({
+          id = string
+        })
+      })
+    })), [])
   }))
   default     = {}
   description = <<DESCRIPTION

@@ -386,14 +386,25 @@ variable "virtual_hubs" {
     }), {})
 
     firewall = optional(object({
-      name                  = optional(string)
-      sku_name              = optional(string, "AZFW_Hub")
-      sku_tier              = optional(string, "Standard")
-      zones                 = optional(list(number))
-      firewall_policy_id    = optional(string)
-      vhub_public_ip_count  = optional(string)
-      firewall_public_ip_id = optional(string)
-      tags                  = optional(map(string))
+      name                 = optional(string)
+      sku_name             = optional(string, "AZFW_Hub")
+      sku_tier             = optional(string, "Standard")
+      zones                = optional(list(number))
+      firewall_policy_id   = optional(string)
+      vhub_public_ip_count = optional(string)
+      firewall_public_ip_ids = optional(list(object({
+        name         = optional(string)
+        public_ip_id = string
+      })), [])
+      firewall_public_ip_configurations = optional(list(object({
+        name = string
+        properties = object({
+          publicIPAddress = object({
+            id = string
+          })
+        })
+      })), [])
+      tags = optional(map(string))
     }), {})
 
     firewall_policy = optional(object({
